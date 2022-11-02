@@ -15,8 +15,44 @@ function checkForm(array $datos): array {
     if (empty($datos['json_notas'])) {
         $errores['json_notas'] = "Este campo es obligatorio";
     } else {
-        // validar que es formato json dado
+        $modulos = json_decode($datos['json_notas'], true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            $errores['json_notas'] = "El formato no es el correcto";
+        } else {
+            $erroresJson = "";
+            foreach ($modulos as $modulo => $alumnos) {
+                if (empty($modulo)) {
+                    $erroresJson .= "El nombre del módulo no puede estar vacio";
+                }
+                if (!is_array($alumnos)) {
+                    $erroresJson .= "El modulo '" . htmlentities($modulo) . " no tiene un array alumnos<br>";
+                } else {
+                    foreach ($alumnos as $alumno => $notas) {
+                        if (empty($alumno)) {
+                            $erroresJson .= "El modulo " . htmlentities($modulo) . " tiene un alumno sin nombre<br>";
+                        }
+                        if (!is_array($notas)) {
+                            $erroresJson .= "En " . htmlentities($modulo) . " el alumno " . htmlentities($alumno) . " no tiene un array de notas<br>";
+                        } else {
+                            foreach ($notas as $nota) {
+                                if (!is_numeric($nota)) {
+                                    $erroresJson .= "En " . htmlentities($modulo) . " el alumno " . htmlentities($alumno) . " tiene una nota inválida<br>";
+                                } else {
+                                    if ($nota < 0 || $nota > 10) {
+                                        $erroresJson .= "En " . htmlentities($modulo) . " el alumno " . htmlentities($alumno) . " tiene una nota de " . $nota . "<br>";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if (!empty($erroresJson)) {
+                $errores['json_notas'] = $erroresJson;
+            }
+        }
     }
+    return $errores;
 }
 
 include 'views/templates/header.php';
