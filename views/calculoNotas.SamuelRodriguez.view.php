@@ -8,6 +8,11 @@
     <?php
     if (isset($data['resultado'])) {
         ?>
+    
+    <div class="alert alert-success">
+        <?php echo var_dump($data['resultado']['modulos'])?>
+    </div>
+    
         <div class="col-12">
             <div class="card shadow mb-4">
                 <div
