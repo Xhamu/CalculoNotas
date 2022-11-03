@@ -6,7 +6,7 @@ if (isset($_POST['enviar'])) {
     $data['errores'] = checkForm($_POST);
     $data['input'] = filter_var_array($_POST, FILTER_SANITIZE_SPECIAL_CHARS);
     if (count($data['errores']) == 0) {
-        $jsonArray = json_decode($_POST['json_notas'],true);
+        $jsonArray = json_decode($_POST['json_notas'], true);
         $resultado = datosAsignaturas($jsonArray);
         $data['resultado'] = $resultado;
     }

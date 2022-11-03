@@ -1,18 +1,13 @@
 <!-- Page Heading -->
 <div class="d-sm-flex align-items-center justify-content-between mb-4">
-    <h1 class="h3 mb-0 text-gray-800">Iterativas 08</h1>
+    <h1 class="h3 mb-0 text-gray-800">Calculo de notas</h1>
 </div>
 <!-- Content Row -->
 
 <div class="row">
     <?php
-    if (isset($data['resultado'])) {
+    if (isset($data['resultado']['modulos'])) {
         ?>
-    
-    <div class="alert alert-success">
-        <?php echo var_dump($data['resultado']['modulos'])?>
-    </div>
-    
         <div class="col-12">
             <div class="card shadow mb-4">
                 <div
@@ -21,8 +16,7 @@
                 </div>
                 <!-- Card Body -->
                 <div class="card-body">
-
-                    <table class="table table-striped">
+                    <table class="table table-striped text-center">
                         <thead>
                             <tr>
                                 <th>Módulo</th>
@@ -42,8 +36,8 @@
                                     <td><?php echo number_format($datosModulo['media'], 2, ',', '.'); ?></td>
                                     <td><?php echo $datosModulo['aprobados']; ?></td>
                                     <td><?php echo $datosModulo['suspensos']; ?></td>
-                                    <td><?php echo $datosModulo['max']['alumno'] . ': ' . $datosModulo['max']['nota']; ?></td>
-                                    <td><?php echo $datosModulo['min']['alumno'] . ': ' . $datosModulo['min']['nota']; ?></td>
+                                    <td><?php echo $datosModulo['max']['alumno'] . ': ' . number_format($datosModulo['max']['nota'], 2, ',', '.'); ?></td>
+                                    <td><?php echo $datosModulo['min']['alumno'] . ': ' . number_format($datosModulo['min']['nota'], 2, ',', '.'); ?></td>
                                 </tr>
                                 <?php
                             }
@@ -52,49 +46,59 @@
                     </table>
                 </div>
             </div>
-        </div>
-        <?php
-    }
-    if (isset($data['resultado'])) {
-        ?>
-        <!--Para parte 2 -->
-        <div class="col-lg-4 col-12">
-            <div class="alert alert-success">
-                <ol>
-                    <?php
-                    foreach ($resultado['alumnos'] as $nombre => $datos) {
-                        if ($datos['suspensos'] == 0) {
-                            echo "<li>$nombre</li>";
-                        }
-                    }
-                    ?>
-                </ol>
-            </div>
-        </div>
-        <div class="col-lg-4 col-12">
-            <div class="alert alert-warning">
-                <ol>
-                    <?php
-                    foreach ($resultado['alumnos'] as $nombre => $datos) {
-                        if ($datos['suspensos'] <= 1) {
-                            echo "<li>$nombre</li>";
-                        }
-                    }
-                    ?>
-                </ol>
-            </div>
-        </div>
-        <div class="col-lg-4 col-12">
-            <div class="alert alert-danger">
-                <ol>
-                    <?php
-                    foreach ($resultado['alumnos'] as $nombre => $datos) {
-                        if ($datos['suspensos'] > 1) {
-                            echo "<li>$nombre</li>";
-                        }
-                    }
-                    ?>
-                </ol>
+            <div class="row">
+                <div class="col-12 col-lg-6">
+                    <div class="alert alert-success">
+                        <ol>
+                            <?php
+                            foreach ($resultado['alumnos'] as $nombre => $datos) {
+                                if ($datos['suspensos'] === 0) {
+                                    echo "<li>$nombre</li>";
+                                }
+                            }
+                            ?>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="alert alert-warning">
+                        <ol>
+                            <?php
+                            foreach ($resultado['alumnos'] as $nombre => $datos) {
+                                if ($datos['suspensos'] === 1) {
+                                    echo "<li>$nombre</li>";
+                                }
+                            }
+                            ?>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="alert alert-info">
+                        <ol>
+                            <?php
+                            foreach ($resultado['alumnos'] as $nombre => $datos) {
+                                if ($datos['suspensos'] <= 1) {
+                                    echo "<li>$nombre</li>";
+                                }
+                            }
+                            ?>
+                        </ol>
+                    </div>
+                </div>
+                <div class="col-12 col-lg-6">
+                    <div class="alert alert-danger">
+                        <ol>
+                            <?php
+                            foreach ($resultado['alumnos'] as $nombre => $datos) {
+                                if ($datos['suspensos'] >= 2) {
+                                    echo "<li>$nombre</li>";
+                                }
+                            }
+                            ?>
+                        </ol>
+                    </div>
+                </div>
             </div>
         </div>
         <?php
@@ -113,7 +117,7 @@
                 <form method="post" action="./?sec=calculoNotas.SamuelRodriguez">
                     <!--<input type="hidden" name="sec" value="iterativas01" />-->
                     <div class="mb-3">
-                        <label for="texto">Json Notas:</label>
+                        <label for="texto">Introducir texto en formato JSON:</label>
                         <textarea class="form-control" id="json_notas" name="json_notas" rows="10"><?php echo isset($data['input']['json_notas']) ? $data['input']['json_notas'] : ''; ?></textarea>
                         <p class="text-danger small"><?php echo isset($data['errores']['json_notas']) ? $data['errores']['json_notas'] : ''; ?></p>
                     </div>                    
